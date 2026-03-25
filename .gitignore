@@ -1,0 +1,22 @@
+# 忽略所有資料庫檔案
+*.db
+database/
+
+# 忽略輸入的 PDF 原始檔
+pdf/*.pdf
+
+# 忽略輸出的圖片 (支援 png, jpg)
+img/**/*.png
+img/**/*.jpg
+
+# 忽略輸出的 Excel 報表
+excel/*.xlsx
+excel/*.csv
+
+# 忽略 Python 快取
+__pycache__/
+*.pyc
+
+# 忽略虛擬環境 (如果你有用的話)
+venv/
+.venv/
