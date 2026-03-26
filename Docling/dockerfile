@@ -1,0 +1,43 @@
+# 1. 使用 CUDA 12.1 基礎鏡像
+FROM nvidia/cuda:12.1.0-cudnn8-devel-ubuntu22.04
+
+# 設定環境變數防止安裝過程彈出互動視窗
+ENV DEBIAN_FRONTEND=noninteractive
+
+# 2. 安裝系統依賴，包含 python3 和 python3-pip
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    python3-dev \
+    git \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+# 3. 確保 pip 是最新版 (Ubuntu 22.04 預設是 python3)
+RUN pip3 install --no-cache-dir --upgrade pip
+
+# 4. 安裝你的 AI 套件 (注意這裡改用 pip3 或者確保上一行已連結)
+RUN pip3 install --no-cache-dir \
+    transformers>=4.37.2 \
+    accelerate \
+    timm \
+    einops \
+    sentencepiece \
+    opencv-python \
+    pillow \
+    gradio \
+    bitsandbytes \
+    surya-ocr
+
+# 5. 安裝 PyTorch (獨立另一個 RUN)
+RUN pip3 install --no-cache-dir \
+    torch torchvision torchaudio \
+    --index-url https://download.pytorch.org/whl/cu121
+	
+# 設定工作目錄
+WORKDIR /workspace/app
+
+# 如果你已經進入開發階段，這兩行可以先註解掉，改用 -v 掛載
+# COPY . /workspace/app
+# CMD ["python3", "main.py"]
